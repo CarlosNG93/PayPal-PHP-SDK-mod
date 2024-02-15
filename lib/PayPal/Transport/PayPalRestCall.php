@@ -55,12 +55,7 @@ class PayPalRestCall
     {
         $config = $this->apiContext->getConfig();
         $httpConfig = new PayPalHttpConfig(null, $method, $config);
-
-        
-        if (!is_array($headers)) {
-            
-            throw new \InvalidArgumentException('Expected $headers to be an array, got ' . gettype($headers));
-        }
+        $headers = $headers ? $headers : array();
         $httpConfig->setHeaders(
             array_merge($headers, array('Content-Type' => 'application/json'))
         );
