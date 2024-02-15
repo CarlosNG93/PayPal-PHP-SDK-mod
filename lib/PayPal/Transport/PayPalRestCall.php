@@ -1,4 +1,5 @@
 <?php
+
 namespace PayPal\Transport;
 
 use PayPal\Core\PayPalHttpConfig;
@@ -50,15 +51,16 @@ class PayPalRestCall
      * @return mixed
      * @throws \PayPal\Exception\PayPalConnectionException
      */
-    public function execute($handlers = array(), $path, $method, $data = '', $headers = array())
+    public function execute($path, $method, $data = '', $headers = array(), $handlers = array())
     {
         $config = $this->apiContext->getConfig();
         $httpConfig = new PayPalHttpConfig(null, $method, $config);
         $headers = $headers ? $headers : array();
-        $httpConfig->setHeaders($headers +
-            array(
-                'Content-Type' => 'application/json'
-            )
+        $httpConfig->setHeaders(
+            $headers +
+                array(
+                    'Content-Type' => 'application/json'
+                )
         );
 
         // if proxy set via config, add it
