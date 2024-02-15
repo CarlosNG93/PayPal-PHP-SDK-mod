@@ -57,6 +57,10 @@ class PayPalRestCall
         $httpConfig = new PayPalHttpConfig(null, $method, $config);
         $headers = $headers ? $headers : array();
 
+        if (!is_array($headers)) {
+            $headers = [];
+        }
+
         $headers['Content-Type'] = 'application/json';
         $httpConfig->setHeaders($headers);
 

@@ -544,19 +544,19 @@ class Payment extends PayPalResourceModel
     {
         return $this->getLink(PayPalConstants::APPROVAL_URL);
     }
-
-    /**
+	
+	/**
      * Get token from Approval Link
      *
      * @return null|string
      */
-    public function getToken()
-    {
-        $parameter_name = "token";
-        parse_str(parse_url($this->getApprovalLink(), PHP_URL_QUERY), $query);
-        return !isset($query[$parameter_name]) ? null : $query[$parameter_name];
-    }
-
+	public function getToken()
+	{
+		$parameter_name = "token";
+		parse_str(parse_url($this->getApprovalLink(), PHP_URL_QUERY), $query);
+		return !isset($query[$parameter_name]) ? null : $query[$parameter_name];
+	}
+	
     /**
      * Creates and processes a payment. In the JSON request body, include a `payment` object with the intent, payer, and transactions. For PayPal payments, include redirect URLs in the `payment` object.
      *
@@ -571,7 +571,7 @@ class Payment extends PayPalResourceModel
             "/v1/payments/payment",
             "POST",
             $payLoad,
-            array(),
+            null,
             $apiContext,
             $restCall
         );
@@ -666,14 +666,14 @@ class Payment extends PayPalResourceModel
         ArgumentValidator::validate($params, 'params');
         $payLoad = "";
         $allowedParams = array(
-            'count' => 1,
-            'start_id' => 1,
-            'start_index' => 1,
-            'start_time' => 1,
-            'end_time' => 1,
-            'payee_id' => 1,
-            'sort_by' => 1,
-            'sort_order' => 1,
+                    'count' => 1,
+                    'start_id' => 1,
+                    'start_index' => 1,
+                    'start_time' => 1,
+                    'end_time' => 1,
+                    'payee_id' => 1,
+                    'sort_by' => 1,
+                    'sort_order' => 1,
         );
         $json = self::executeCall(
             "/v1/payments/payment?" . http_build_query(array_intersect_key($params, $allowedParams)),
@@ -687,4 +687,5 @@ class Payment extends PayPalResourceModel
         $ret->fromJson($json);
         return $ret;
     }
+
 }
