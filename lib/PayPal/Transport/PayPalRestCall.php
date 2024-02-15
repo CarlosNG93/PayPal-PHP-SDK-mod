@@ -56,9 +56,9 @@ class PayPalRestCall
         $config = $this->apiContext->getConfig();
         $httpConfig = new PayPalHttpConfig(null, $method, $config);
 
-        // Asegura que $headers sea un array
+        
         if (!is_array($headers)) {
-            // Maneja el caso de que $headers no sea un array, por ejemplo, lanzando una excepción o convirtiéndolo en un array
+            
             throw new \InvalidArgumentException('Expected $headers to be an array, got ' . gettype($headers));
         }
         $httpConfig->setHeaders(
