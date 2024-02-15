@@ -57,10 +57,7 @@ class PayPalRestCall
         $httpConfig = new PayPalHttpConfig(null, $method, $config);
         $headers = $headers ? $headers : array();
         $httpConfig->setHeaders(
-            $headers +
-                array(
-                    'Content-Type' => 'application/json'
-                )
+            array_merge($headers, array('Content-Type' => 'application/json'))
         );
 
         // if proxy set via config, add it
