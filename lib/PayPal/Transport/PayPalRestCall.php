@@ -55,22 +55,23 @@ class PayPalRestCall
     {
         $config = $this->apiContext->getConfig();
         $httpConfig = new PayPalHttpConfig(null, $method, $config);
-        $headers = $headers ? $headers : array();
 
-        if (!is_array($headers)) {
-            $headers = [];
+        // Asegura que $headers sea un arreglo
+        $headers = is_array($headers) ? $headers : [];
+
+        // Agrega el encabezado 'Content-Type' si no está ya presente
+        if (!array_key_exists('Content-Type', $headers)) {
+            $headers['Content-Type'] = 'application/json';
         }
 
-        $headers['Content-Type'] = 'application/json';
         $httpConfig->setHeaders($headers);
 
-
-        // if proxy set via config, add it
+        // Si se configura un proxy a través de la configuración, agrégalo
         if (!empty($config['http.Proxy'])) {
             $httpConfig->setHttpProxy($config['http.Proxy']);
         }
 
-        /** @var \Paypal\Handler\IPayPalHandler $handler */
+        // Maneja los controladores específicos si se proporcionan
         foreach ($handlers as $handler) {
             if (!is_object($handler)) {
                 $fullHandler = "\\" . (string)$handler;
@@ -78,6 +79,7 @@ class PayPalRestCall
             }
             $handler->handle($httpConfig, $data, array('path' => $path, 'apiContext' => $this->apiContext));
         }
+
         $connection = new PayPalHttpConnection($httpConfig, $config);
         $response = $connection->execute($data);
 

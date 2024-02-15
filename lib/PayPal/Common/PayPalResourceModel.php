@@ -96,14 +96,24 @@ class PayPalResourceModel extends PayPalModel implements IResource
      */
     protected static function executeCall($url, $method, $payLoad, $headers = array(), $apiContext = null, $restCall = null, $handlers = array('PayPal\Handler\RestHandler'))
     {
-        //Initialize the context and rest call object if not provided explicitly
-        $apiContext = $apiContext ? $apiContext : new ApiContext(self::$credential);
-        $restCall = $restCall ? $restCall : new PayPalRestCall($apiContext);
+        // Inicializa el contexto y el objeto de llamada REST si no se proporcionan explícitamente
+        $apiContext = $apiContext ?: new ApiContext(self::$credential);
+        $restCall = $restCall ?: new PayPalRestCall($apiContext);
 
-        //Make the execution call
-        $json = $restCall->execute($handlers, $url, $method, $payLoad, $headers);
+        // Asegura que $headers sea un arreglo
+        $headers = is_array($headers) ? $headers : [];
+
+        // Agrega el encabezado 'Content-Type' si no está ya presente
+        if (!array_key_exists('Content-Type', $headers)) {
+            $headers['Content-Type'] = 'application/json';
+        }
+
+        // Realiza la llamada de ejecución
+        $json = $restCall->execute($url, $method, $payLoad, $headers, $handlers);
         return $json;
     }
+
+
 
     /**
      * Updates Access Token using long lived refresh token
